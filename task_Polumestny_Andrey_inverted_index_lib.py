@@ -69,7 +69,7 @@ def load_documents(filepath: str) -> Dict[int, str]:
         for line in f_in:
             doc_id, content = line.lower().split("\t", 1)
             doc_id = int(doc_id)
-            in_memory_doc[doc_id] = content
+            in_memory_doc[doc_id] = content.strip()
     return in_memory_doc
 
 
