@@ -83,8 +83,12 @@ def test_load_doc_count_of_topic():
     [
         pytest.param(['anarchism'], [12], id='one_document_matching'),
         pytest.param(['topic'], [12, 25], id='two_document_matching'),
-        pytest.param(['topic', 'test'], [25, 12], id='list_of_words_in_two_document_matching'),
-        pytest.param(['topic', 'something'], [], id='list_of_words_in_two_document_not_found'),
+        pytest.param(['topic', 'test'],
+                     [25, 12],
+                     id='list_of_words_in_two_document_matching'),
+        pytest.param(['topic', 'something'],
+                     [],
+                     id='list_of_words_in_two_document_not_found'),
         pytest.param(['None'], [], id='not_found_document'),
     ]
 )

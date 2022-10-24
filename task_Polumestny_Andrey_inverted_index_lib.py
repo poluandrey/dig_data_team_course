@@ -8,11 +8,12 @@ import re
 from pathlib import Path
 from typing import Dict, List
 
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent.resolve()
 
 
 class InvertedIndex:
     """class represented inverted index"""
+
     def __init__(self, inverted_index: Dict[str, list[str]]):
         self.index = inverted_index
 
@@ -33,7 +34,9 @@ class InvertedIndex:
             if not relevant_documents:
                 relevant_documents = tmp_relevant_documents[:]
             else:
-                relevant_documents = list(set(relevant_documents).intersection(tmp_relevant_documents))
+                relevant_documents = list(
+                    set(relevant_documents).intersection(
+                        tmp_relevant_documents))
         return relevant_documents
 
     def dump(self, filepath: str) -> None:
