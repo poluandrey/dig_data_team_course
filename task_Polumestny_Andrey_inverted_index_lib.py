@@ -22,14 +22,18 @@ class InvertedIndex:
     def __str__(self):
         return str(self.index)
 
-    def query(self, words: List[str]) -> List[str]:
+    def query(self, words: List[str]) -> List[int]:
         """Return the list of relevant documents for the given query"""
         relevant_documents = []
         for word in words:
             documents = self.index.get(word, None)
-            if documents:
-                for doc in documents:
-                    relevant_documents.append(doc)
+            if not documents:
+                return []
+            tmp_relevant_documents = [int(document) for document in documents]
+            if not relevant_documents:
+                relevant_documents = tmp_relevant_documents[:]
+            else:
+                relevant_documents = list(set(relevant_documents).intersection(tmp_relevant_documents))
         return relevant_documents
 
     def dump(self, filepath: str) -> None:
@@ -37,7 +41,6 @@ class InvertedIndex:
         file = Path(filepath)
         if not file.is_absolute():
             file = BASE_DIR.joinpath(file)
-        print(self.index)
         with open(file, 'w') as f_out:
             json.dump(self.index, f_out)
 

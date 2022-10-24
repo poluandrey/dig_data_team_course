@@ -5,18 +5,16 @@ from textwrap import dedent
 
 import pytest
 
-import inverted_index
+import task_Polumestny_Andrey_inverted_index_lib as inverted_index
 
 
 @pytest.fixture(ids='small_dataset')
 def small_doc(tmpdir):
     """
     fixture load in memory small document
-    :param tmpdir: pytest tmp folder
-    :return: in memory representation of document
     """
     data = dedent("""\
-    12	Anarchism         Anarchism is often defined as topic
+    12	Anarchism         Anarchism is often defined as topic test
     25	Test             Another topic 
     """)
     small_dataset = tmpdir.join('small_dataset')
@@ -29,8 +27,6 @@ def small_doc(tmpdir):
 def small_inverted_index(small_doc):
     """
     build inverted index base on small_doc fixture
-    :param small_doc: fixture(small_doc)
-    :return: InvertedIndex instance
     """
     small_inverted_index = inverted_index.build_inverted_index(small_doc)
     return small_inverted_index
@@ -39,7 +35,6 @@ def small_inverted_index(small_doc):
 def test_load_non_existing_documents():
     """
     test raising exception when load not existing document
-    :return:
     """
     with pytest.raises(FileNotFoundError):
         inverted_index.load_documents('datasets/some_file.txt')
@@ -86,8 +81,10 @@ def test_load_doc_count_of_topic():
 @pytest.mark.parametrize(
     'words, answer',
     [
-        pytest.param(['test'], [25], id='one_document_matching'),
+        pytest.param(['anarchism'], [12], id='one_document_matching'),
         pytest.param(['topic'], [12, 25], id='two_document_matching'),
+        pytest.param(['topic', 'test'], [25, 12], id='list_of_words_in_two_document_matching'),
+        pytest.param(['topic', 'something'], [], id='list_of_words_in_two_document_not_found'),
         pytest.param(['None'], [], id='not_found_document'),
     ]
 )
