@@ -5,7 +5,8 @@ from textwrap import dedent
 
 import pytest
 
-import task_Polumestny_Andrey_inverted_index_lib as inverted_index
+
+import task_Polumestny_Andrey_inverted_index_cli as inverted_index
 
 
 @pytest.fixture(ids='small_dataset')
@@ -123,3 +124,17 @@ def test_inverted_index_load(small_inverted_index):
 
     err_msg = 'loaded inverted index not equal with expected'
     assert inv_index == loaded_inv_index, err_msg
+
+
+# @pytest.mark.parametrize()
+def test_cli_query_from_file(capsys):
+    query_file = 'datasets/query_utf8.txt'
+    with open(query_file, 'r') as query_file_in:
+        inverted_index.query_from_file(inverted_index_path='datasets/cli_dataset.json', query_file=query_file_in)
+        captured = capsys.readouterr()
+        assert '12,25' in captured.out
+        assert 'topic' in captured.err
+        assert '12,25' not in captured.err
+        assert 'topic' not in captured.out
+
+
